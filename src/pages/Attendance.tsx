@@ -1,31 +1,27 @@
 import { useState } from 'react';
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TeacherBeaconPanel } from '@/components/attendance/TeacherBeaconPanel';
 import { StudentScannerPanel } from '@/components/attendance/StudentScannerPanel';
-import { GraduationCap, Radio, Bluetooth } from 'lucide-react';
+import { Radio, Bluetooth } from 'lucide-react';
 
-const Index = () => {
+export default function Attendance() {
   const [activeTab, setActiveTab] = useState('teacher');
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-2">
-            <GraduationCap className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold">CampusSync</h1>
-          </div>
-          <p className="text-sm text-muted-foreground mt-1">
-            Bluetooth Attendance System
+    <DashboardLayout>
+      <div className="space-y-6">
+        {/* Page Header */}
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Bluetooth Attendance</h1>
+          <p className="text-muted-foreground">
+            Mark attendance using Bluetooth proximity detection.
           </p>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col items-center">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-md">
+        {/* Role Tabs */}
+        <div className="flex justify-center">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-lg">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="teacher" className="flex items-center gap-2">
                 <Radio className="h-4 w-4" />
@@ -41,14 +37,12 @@ const Index = () => {
               <TeacherBeaconPanel />
             </TabsContent>
             
-            <TabsContent value="student" className="mt-6">
+            <TabsContent value="student" className="mt-6 flex justify-center">
               <StudentScannerPanel />
             </TabsContent>
           </Tabs>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
-};
-
-export default Index;
+}
