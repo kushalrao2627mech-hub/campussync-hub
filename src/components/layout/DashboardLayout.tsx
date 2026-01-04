@@ -1,100 +1,79 @@
 import { ReactNode } from 'react';
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarGroup, 
-  SidebarGroupContent, 
-  SidebarMenu, 
-  SidebarMenuButton, 
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-  useSidebar
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 import { NavLink } from '@/components/NavLink';
-import { 
-  LayoutDashboard, 
-  Bluetooth, 
-  Calendar, 
-  BookOpen, 
-  History,
-  GraduationCap,
-  Menu,
-  LogOut
-} from 'lucide-react';
+import { LayoutDashboard, Bluetooth, Calendar, BookOpen, History, GraduationCap, Menu, LogOut } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-
-const navItems = [
-  { title: 'Dashboard', url: '/', icon: LayoutDashboard },
-  { title: 'Attendance', url: '/attendance', icon: Bluetooth },
-  { title: 'Timetable', url: '/timetable', icon: Calendar },
-  { title: 'Curriculum', url: '/curriculum', icon: BookOpen },
-  { title: 'History', url: '/history', icon: History },
-];
-
+const navItems = [{
+  title: 'Dashboard',
+  url: '/',
+  icon: LayoutDashboard
+}, {
+  title: 'Attendance',
+  url: '/attendance',
+  icon: Bluetooth
+}, {
+  title: 'Timetable',
+  url: '/timetable',
+  icon: Calendar
+}, {
+  title: 'Curriculum',
+  url: '/curriculum',
+  icon: BookOpen
+}, {
+  title: 'History',
+  url: '/history',
+  icon: History
+}];
 function AppSidebar() {
   const location = useLocation();
-  const { state } = useSidebar();
+  const {
+    state
+  } = useSidebar();
   const collapsed = state === 'collapsed';
-
-  return (
-    <Sidebar collapsible="icon" className="border-r border-border">
+  return <Sidebar collapsible="icon" className="border-r border-border">
       <div className="h-14 flex items-center px-4 border-b border-border">
         <GraduationCap className="h-6 w-6 shrink-0" />
-        {!collapsed && (
-          <span className="ml-2 font-semibold text-lg tracking-tight">CampusSync</span>
-        )}
+        {!collapsed && <span className="ml-2 font-semibold text-lg tracking-tight">CampusSync</span>}
       </div>
       
       <SidebarContent className="pt-4">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {navItems.map(item => <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink 
-                      to={item.url} 
-                      end={item.url === '/'}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
-                        "hover:bg-accent"
-                      )}
-                      activeClassName="bg-accent font-medium"
-                    >
+                    <NavLink to={item.url} end={item.url === '/'} className={cn("flex items-center gap-3 px-3 py-2 rounded-md transition-colors", "hover:bg-accent")} activeClassName="bg-accent font-medium">
                       <item.icon className="h-5 w-5 shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && <span className="text-muted-foreground">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                </SidebarMenuItem>)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-    </Sidebar>
-  );
+    </Sidebar>;
 }
-
 interface DashboardLayoutProps {
   children: ReactNode;
 }
-
-export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { user, logout } = useAuth();
+export function DashboardLayout({
+  children
+}: DashboardLayoutProps) {
+  const {
+    user,
+    logout
+  } = useAuth();
   const navigate = useNavigate();
-
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
-
-  return (
-    <SidebarProvider>
+  return <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         
@@ -127,6 +106,5 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </main>
         </div>
       </div>
-    </SidebarProvider>
-  );
+    </SidebarProvider>;
 }
