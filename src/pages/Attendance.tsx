@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TeacherBeaconPanel } from '@/components/attendance/TeacherBeaconPanel';
 import { StudentScannerPanel } from '@/components/attendance/StudentScannerPanel';
-import { Radio, Bluetooth } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Attendance() {
-  const [activeTab, setActiveTab] = useState('teacher');
+  const { user } = useAuth();
+  const isTeacher = user?.role === 'teacher';
 
   return (
     <DashboardLayout>
@@ -15,32 +14,20 @@ export default function Attendance() {
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Bluetooth Attendance</h1>
           <p className="text-muted-foreground">
-            Mark attendance using Bluetooth proximity detection.
+            {isTeacher 
+              ? 'Start a session to broadcast your beacon and track student check-ins.'
+              : 'Scan for your teacher\'s beacon to mark your attendance.'
+            }
           </p>
         </div>
 
-        {/* Role Tabs */}
+        {/* Role-based Panel */}
         <div className="flex justify-center">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-lg">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="teacher" className="flex items-center gap-2">
-                <Radio className="h-4 w-4" />
-                Teacher
-              </TabsTrigger>
-              <TabsTrigger value="student" className="flex items-center gap-2">
-                <Bluetooth className="h-4 w-4" />
-                Student
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="teacher" className="mt-6">
-              <TeacherBeaconPanel />
-            </TabsContent>
-            
-            <TabsContent value="student" className="mt-6 flex justify-center">
-              <StudentScannerPanel />
-            </TabsContent>
-          </Tabs>
+          {isTeacher ? (
+            <TeacherBeaconPanel />
+          ) : (
+            <StudentScannerPanel />
+          )}
         </div>
       </div>
     </DashboardLayout>
